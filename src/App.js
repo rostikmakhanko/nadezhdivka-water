@@ -8,7 +8,9 @@ import "firebase/analytics";
 import * as firebaseui from "firebaseui";
 import {
   createUserWithEmailAndPassword,
-  createUserWithEmailAndPasswordPromise
+  createUserWithEmailAndPasswordPromise,
+  loginUserWithEmailAndPasswordPromise,
+  getCurrentUser
 } from "./firebase";
 import "../node_modules/firebaseui/dist/firebaseui.css";
 
@@ -55,6 +57,21 @@ function App() {
       });
   };
 
+  const onLoginButtonClick = () => {
+    console.log(email + " " + password);
+    loginUserWithEmailAndPasswordPromise(email, password)
+      .then(data => {
+        console.log("Successfully logged in user with id " + data.userId);
+      })
+      .catch(error => {
+        console.log("Error occurred: " + error.errorMessage);
+      });
+  };
+
+  const onCurrentUserButtonClick = () => {
+    getCurrentUser();
+  };
+
   const onEmptyButtonClick = () => {
     console.log(111);
   };
@@ -80,7 +97,9 @@ function App() {
         <input
           onChange={inputPassword => setPassword(inputPassword.target.value)}
         ></input>
+        <button onClick={onLoginButtonClick}>Login</button>
         <button onClick={onRegisterButtonClick}>Register</button>
+        <button onClick={onCurrentUserButtonClick}>Current User</button>
         <button onClick={onEmptyButtonClick}>HHH</button>
         <div id="firebaseui-auth-container"></div>
       </header>

@@ -32,7 +32,7 @@ export function createUserWithEmailAndPassword(email, password) {
 }
 
 export function createUserWithEmailAndPasswordPromise(email, password) {
-  const newUserPromise = new Promise((resolve, reject) => {
+  const createUserPromise = new Promise((resolve, reject) => {
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -43,5 +43,29 @@ export function createUserWithEmailAndPasswordPromise(email, password) {
         reject({ errorMessage: error.message });
       });
   });
-  return newUserPromise;
+  return createUserPromise;
+}
+
+export function loginUserWithEmailAndPasswordPromise(email, password) {
+  const loginUserPromise = new Promise((resolve, reject) => {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(userCredentials => {
+        resolve({ userId: userCredentials.user.uid });
+      })
+      .catch(error => {
+        reject({ errorMessage: error.message });
+      });
+  });
+  return loginUserPromise;
+}
+
+export function getCurrentUser() {
+  const currentUser = firebase.auth().currentUser;
+  if (currentUser) {
+    console.log("Current user is " + currentUser.email);
+  } else {
+    console.log("No one is logged in");
+  }
 }
