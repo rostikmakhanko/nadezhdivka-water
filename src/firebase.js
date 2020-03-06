@@ -14,19 +14,34 @@ const firebaseConfig = {
 export function createUserWithEmailAndPassword(email, password) {
   try {
     firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password)
-        .then(userCredentials => {
-          console.log("Registered user " + userCredentials.user.email);
-        })
-        .catch(function (error) {
-          // Handle Errors here.
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(errorCode + " " + errorMessage);
-        });
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(userCredentials => {
+        console.log("Registered user " + userCredentials.user.email);
+      })
+      .catch(function(error) {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode + " " + errorMessage);
+      });
   } catch (e) {
     console.log(e);
-    console.log('We could not register you');
+    console.log("We could not register you");
   }
+}
+
+export function createUserWithEmailAndPasswordPromise(email, password) {
+  const newUserPromise = new Promise((resolve, reject) => {
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(userCredentials => {
+        resolve({ userId: userCredentials.user.uid });
+      })
+      .catch(error => {
+        reject({ errorMessage: error.message });
+      });
+  });
+  return newUserPromise;
 }

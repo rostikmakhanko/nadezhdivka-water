@@ -6,7 +6,10 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/analytics";
 import * as firebaseui from "firebaseui";
-import { createUserWithEmailAndPassword } from "./firebase";
+import {
+  createUserWithEmailAndPassword,
+  createUserWithEmailAndPasswordPromise
+} from "./firebase";
 import "../node_modules/firebaseui/dist/firebaseui.css";
 
 const firebaseConfig = {
@@ -36,9 +39,20 @@ function App() {
     ui.start("#firebaseui-auth-container", uiConfig);
   }, []);
 
+  // const onRegisterButtonClick = () => {
+  //   console.log(email + " " + password);
+  //   createUserWithEmailAndPassword(email, password);
+  // };
+
   const onRegisterButtonClick = () => {
     console.log(email + " " + password);
-    createUserWithEmailAndPassword(email, password);
+    createUserWithEmailAndPasswordPromise(email, password)
+      .then(data => {
+        console.log("Successfully registered user with id " + data.userId);
+      })
+      .catch(error => {
+        console.log("Error occurred: " + error.errorMessage);
+      });
   };
 
   const onEmptyButtonClick = () => {
